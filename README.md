@@ -1,3 +1,3 @@
 # CovidTracker
 
-Working site at [CovidTracker](https://github.com/facebook/create-react-app).
+Working site at [CovidTracker](https://elegant-kowalevski-51be82.netlify.app/).
