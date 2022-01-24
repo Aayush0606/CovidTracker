@@ -82,7 +82,12 @@ export default function TableBuilder() {
 
   return (
     <>
-      <TableContainer component={Paper}>
+      <TableContainer
+        sx={{
+          backgroundColor: "transparent",
+        }}
+        component={Paper}
+      >
         <Table aria-label="simple table">
           <TableHeader
             order={order}

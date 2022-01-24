@@ -5,9 +5,11 @@ import indiaMap from "./indiaMap.json";
 import ReactTooltip from "react-tooltip";
 import { red, pink, green, blue, grey } from "@mui/material/colors";
 import { useSelector } from "react-redux";
+import MapUpper from "./MapUpper";
 
 export default function MapBuilder({ plotBy }) {
   const [content, setContent] = useState("");
+  const [curr, setCurr] = useState("TT");
 
   const data = useSelector((state) => state.data.value);
 
@@ -43,7 +45,6 @@ export default function MapBuilder({ plotBy }) {
         });
       }
     }
-    console.log(max);
     return max;
   };
 
@@ -123,28 +124,28 @@ export default function MapBuilder({ plotBy }) {
       hover: blue["A400"],
     },
     recovered: {
-      normal: green["A100"],
-      hover: green["A400"],
+      normal: green["A400"],
+      hover: green["A700"],
     },
     deceased: {
-      normal: grey["A100"],
-      hover: grey["A400"],
+      normal: grey["A400"],
+      hover: grey[900],
     },
   };
 
   return (
     <>
-      <ReactTooltip>{content}</ReactTooltip>
+      <MapUpper curr={curr} plotBy={plotBy} data={data} />
+
       <ComposableMap
         data-tip=""
         projection="geoAzimuthalEqualArea"
         projectionConfig={{
-          scale: 2000,
+          scale: 1600,
           rotate: [-82.5, -3, 0],
           center: [0, 19],
         }}
-        height={1000}
-        width={1000}
+        height={850}
       >
         <Geographies geography={indiaMap}>
           {({ geographies }) =>
@@ -154,6 +155,7 @@ export default function MapBuilder({ plotBy }) {
                 geography={geo}
                 onMouseEnter={() => {
                   setContent(geo.properties.name);
+                  setCurr(geo.id);
                 }}
                 onMouseLeave={() => {
                   setContent("");
@@ -195,6 +197,7 @@ export default function MapBuilder({ plotBy }) {
           }
         </Geographies>
       </ComposableMap>
+      <ReactTooltip>{content}</ReactTooltip>
     </>
   );
 }
