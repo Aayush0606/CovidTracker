@@ -2,13 +2,11 @@ import React, { useState } from "react";
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
 import { scaleQuantize } from "d3-scale";
 import indiaMap from "./indiaMap.json";
-import ReactTooltip from "react-tooltip";
 import { red, pink, green, blue, grey } from "@mui/material/colors";
 import { useSelector } from "react-redux";
 import MapUpper from "./MapUpper";
 
-export default function MapBuilder({ plotBy }) {
-  const [content, setContent] = useState("");
+export default function MapBuilder({ plotBy, content, setContent }) {
   const [curr, setCurr] = useState("TT");
 
   const data = useSelector((state) => state.data.value);
@@ -136,16 +134,14 @@ export default function MapBuilder({ plotBy }) {
   return (
     <>
       <MapUpper curr={curr} plotBy={plotBy} data={data} />
-
       <ComposableMap
-        data-tip=""
         projection="geoAzimuthalEqualArea"
         projectionConfig={{
-          scale: 1600,
+          scale: 1300,
           rotate: [-82.5, -3, 0],
-          center: [0, 19],
+          center: [0, 16.5],
         }}
-        height={850}
+        height={750}
       >
         <Geographies geography={indiaMap}>
           {({ geographies }) =>
@@ -154,7 +150,15 @@ export default function MapBuilder({ plotBy }) {
                 key={geo.rsmKey}
                 geography={geo}
                 onMouseEnter={() => {
-                  setContent(geo.properties.name);
+                  setContent(
+                    `${geo.properties.name}-${
+                      plotBy === "active"
+                        ? data[geo.id]["total"]["confirmed"] -
+                          data[geo.id]["total"]["recovered"] -
+                          data[geo.id]["total"]["deceased"]
+                        : data[geo.id]["total"][plotBy]
+                    }`
+                  );
                   setCurr(geo.id);
                 }}
                 onMouseLeave={() => {
@@ -197,7 +201,6 @@ export default function MapBuilder({ plotBy }) {
           }
         </Geographies>
       </ComposableMap>
-      <ReactTooltip>{content}</ReactTooltip>
     </>
   );
 }

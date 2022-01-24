@@ -2,8 +2,11 @@ import React from "react";
 import { Typography, CardContent, Card } from "@mui/material";
 import { red, green, blue, grey } from "@mui/material/colors";
 import { STATE_NAMES } from "../../StateName";
+import { Box, useMediaQuery, useTheme } from "@mui/material";
 
 export default function MapUpper({ curr, plotBy, data }) {
+  const theme = useTheme();
+  const largeScreen = useMediaQuery(theme.breakpoints.up("sm"));
   const backColor = {
     confirmed: {
       normal: red[100],
@@ -23,28 +26,43 @@ export default function MapUpper({ curr, plotBy, data }) {
     },
   };
   return (
-    <>
+    <Box sx={{ width: "100%", textAlign: "center" }}>
       <Card
         variant="button"
         elevation={0}
         sx={{
           backgroundColor: "transparent",
-          margin: "2px",
+          marginTop: "10px",
         }}
       >
         <CardContent>
-          <Typography gutterBottom sx={{ color: backColor[plotBy]["text"] }}>
+          <Typography
+            sx={{
+              color: backColor[plotBy]["text"],
+              fontSize: largeScreen ? 23 : 20,
+            }}
+          >
             {STATE_NAMES[curr]}
           </Typography>
-          <Typography sx={{ color: backColor[plotBy]["text"] }}>
+          <Typography
+            sx={{
+              color: backColor[plotBy]["text"],
+              fontSize: largeScreen ? 23 : 20,
+            }}
+          >
             {plotBy === "active"
-              ? data[curr]["total"]["confirmed"] -
-                data[curr]["total"]["recovered"] -
-                data[curr]["total"]["deceased"]
-              : data[curr]["total"][plotBy]}
+              ? (
+                  data[curr]["total"]["confirmed"] -
+                  data[curr]["total"]["recovered"] -
+                  data[curr]["total"]["deceased"]
+                ).toLocaleString()
+              : data[curr]["total"][plotBy].toLocaleString()}
           </Typography>
           <Typography
-            sx={{ color: backColor[plotBy]["text"] }}
+            sx={{
+              color: backColor[plotBy]["text"],
+              fontSize: largeScreen ? 23 : 20,
+            }}
             variant="body2"
             component="p"
           >
@@ -53,6 +71,6 @@ export default function MapUpper({ curr, plotBy, data }) {
           </Typography>
         </CardContent>
       </Card>
-    </>
+    </Box>
   );
 }

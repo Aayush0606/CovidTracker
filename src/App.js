@@ -8,7 +8,7 @@ import { Box, useMediaQuery, useTheme } from "@mui/material";
 
 export default function App() {
   const theme = useTheme();
-  const largeScreen = useMediaQuery(theme.breakpoints.up("sm"));
+  const largeScreen = useMediaQuery(theme.breakpoints.up("md"));
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.data.status);
   useEffect(() => {
@@ -24,10 +24,10 @@ export default function App() {
             flexDirection: largeScreen ? "row" : "column",
           }}
         >
-          <Box>
+          <Box sx={{ maxWidth: "50vw" }}>
             <MapDisplay />
           </Box>
-          <Box>
+          <Box sx={{ maxWidth: "50vw" }}>
             <TableBuilder />
           </Box>
         </Box>

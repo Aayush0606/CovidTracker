@@ -1,6 +1,7 @@
 import React from "react";
 import { Typography, CardContent, Card } from "@mui/material";
 import { red, green, blue, grey } from "@mui/material/colors";
+import { styled } from "@mui/material/styles";
 
 export default function TopDiv({
   heading,
@@ -27,6 +28,16 @@ export default function TopDiv({
       text: grey[500],
     },
   };
+
+  const CardContentNoPadding = styled(CardContent)(({ theme }) => ({
+    [theme.breakpoints.down("sm")]: {
+      padding: 0,
+      "&:last-child": {
+        paddingBottom: 0,
+      },
+    },
+  }));
+
   return (
     <Card
       variant="button"
@@ -35,29 +46,32 @@ export default function TopDiv({
       sx={{
         backgroundColor:
           plotBy === heading ? backColor[heading]["normal"] : "transparent",
-        margin: "2px",
         ":hover": {
           backgroundColor: backColor[heading]["normal"],
           cursor: "pointer",
         },
       }}
     >
-      <CardContent>
-        <Typography gutterBottom sx={{ color: backColor[heading]["text"] }}>
+      <CardContentNoPadding>
+        <Typography
+          sx={{ color: backColor[heading]["text"], textAlign: "center" }}
+        >
           {heading}
         </Typography>
-        <Typography sx={{ color: backColor[heading]["text"] }}>
-          +{subHeading}
+        <Typography
+          sx={{ color: backColor[heading]["text"], textAlign: "center" }}
+        >
+          +{subHeading.toLocaleString()}
         </Typography>
         <Typography
-          sx={{ color: backColor[heading]["text"] }}
+          sx={{ color: backColor[heading]["text"], textAlign: "center" }}
           variant="body2"
           component="p"
         >
-          {number}
+          {number.toLocaleString()}
           <br />
         </Typography>
-      </CardContent>
+      </CardContentNoPadding>
     </Card>
   );
 }

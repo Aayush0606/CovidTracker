@@ -10,8 +10,36 @@ import {
 import TableHeader from "./TableHeader";
 import { useSelector } from "react-redux";
 import { STATE_NAMES } from "../../StateName";
+import { styled } from "@mui/material/styles";
+import { tableCellClasses } from "@mui/material/TableCell";
+import { blueGrey, grey } from "@mui/material/colors";
 
 export default function TableBuilder() {
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: "red",
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+      color: "white",
+    },
+  }));
+
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    "&:nth-of-type(odd)": {
+      backgroundColor: blueGrey[800],
+    },
+    "&:nth-of-type(even)": {
+      backgroundColor: blueGrey[900],
+    },
+    "&:last-child td, &:last-child th": {
+      border: 0,
+    },
+    "&$hover:hover": {
+      backgroundColor: "pink",
+    },
+  }));
+
   const data = useSelector((state) => state.data.value);
   function createData(name, confirmed, active, recovered, deceased) {
     return { name, confirmed, active, recovered, deceased };
@@ -82,12 +110,7 @@ export default function TableBuilder() {
 
   return (
     <>
-      <TableContainer
-        sx={{
-          backgroundColor: "transparent",
-        }}
-        component={Paper}
-      >
+      <TableContainer component={Paper}>
         <Table aria-label="simple table">
           <TableHeader
             order={order}
@@ -96,15 +119,26 @@ export default function TableBuilder() {
           />
           <TableBody>
             {stableSort(rows, getComparator(order, orderBy)).map((row, idx) => (
-              <TableRow key={row.name} hover>
-                <TableCell component="th" scope="row">
+              <StyledTableRow
+                key={row.name}
+                sx={{ ":hover": { backgroundColor: grey[500] } }}
+              >
+                <StyledTableCell component="th" scope="row">
                   {row.name}
-                </TableCell>
-                <TableCell align="center">{row.confirmed}</TableCell>
-                <TableCell align="center">{row.active}</TableCell>
-                <TableCell align="center">{row.recovered}</TableCell>
-                <TableCell align="center">{row.deceased}</TableCell>
-              </TableRow>
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  {row.confirmed.toLocaleString()}
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  {row.active.toLocaleString()}
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  {row.recovered.toLocaleString()}
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  {row.deceased.toLocaleString()}
+                </StyledTableCell>
+              </StyledTableRow>
             ))}
           </TableBody>
         </Table>

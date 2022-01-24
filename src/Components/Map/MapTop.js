@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import TopDiv from "./TopDiv";
 import { useSelector } from "react-redux";
 
@@ -52,27 +52,23 @@ export default function MapTop({ plotSetter, plotBy }) {
   }, [isLoading]);
 
   return (
-    <>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          margin: "10px",
-        }}
-      >
+    <Box sx={{ width: "100%", margin: "10px" }}>
+      <Grid container spacing={0}>
         {isLoading === "success" &&
           tableHeader.map((key) => {
             return (
-              <TopDiv
-                heading={key}
-                subHeading={reqData[key]["delta"]}
-                number={reqData[key]["total"]}
-                plotSetter={plotSetter}
-                plotBy={plotBy}
-              />
+              <Grid item xs={3}>
+                <TopDiv
+                  heading={key}
+                  subHeading={reqData[key]["delta"]}
+                  number={reqData[key]["total"]}
+                  plotSetter={plotSetter}
+                  plotBy={plotBy}
+                />
+              </Grid>
             );
           })}
-      </Box>
-    </>
+      </Grid>
+    </Box>
   );
 }
